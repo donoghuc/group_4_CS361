@@ -36,10 +36,10 @@ this will start the web server
 navigate to localhost:5000 in a browser and check out the app! 
 
 ### Starting a container
-![Alt text](group_4_CS361/group_4_boilerplate/screenshots/start_docker_app.png?raw=true "term ss")
+![terminal session](group_4_boilerplate/screenshots/start_docker_app.png?raw=true "term ss")
 
 ### View the app 
-![Alt text](group_4_CS361/group_4_boilerplate/screenshots/about_view.png?raw=true "website ss")
+![website](group_4_boilerplate/screenshots/about_view.png?raw=true "website ss")
 
 ### cleanup
 when you are done you can use sigterm (Ctrl c) to kill server, this will drop you back to bash shell in running container. From here you can just type "exit" and you will be dropped back to the shell you started the container from. The container should be destroyed, double check with "docker ps" if you want. 
