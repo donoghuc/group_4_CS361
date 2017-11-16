@@ -3,7 +3,7 @@
 #----------------------------------------------------------------------------#
 
 from flask import Flask, render_template, request
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
 from forms import *
@@ -19,9 +19,9 @@ db = SQLAlchemy(app)
 
 # Automatically tear down SQLAlchemy.
 
-@app.teardown_request
-def shutdown_session(exception=None):
-    db_session.remove()
+# @app.teardown_request
+# def shutdown_session(exception=None):
+#     db_session.remove()
 
 
 # Login required decorator.
@@ -57,9 +57,14 @@ def login():
     return render_template('forms/login.html', form=form)
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
+    if form.validate_on_submit():
+        print(form.name)
+        return redirect('/')
+    else:
+        print('error')
     return render_template('forms/register.html', form=form)
 
 
