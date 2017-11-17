@@ -73,6 +73,13 @@ def forgot():
     form = ForgotForm(request.form)
     return render_template('forms/forgot.html', form=form)
 
+
+@app.route('/reg2')
+def test():
+    person = {"name": "John Doe"}
+    form = Reg2Form(request.form)
+    return render_template('forms/registration2.html', person=person, form=form)
+
 # Error handlers.
 
 
@@ -104,4 +111,3 @@ if not app.debug:
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
-

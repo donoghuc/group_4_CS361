@@ -1,0 +1,36 @@
+{% extends 'layouts/form.html' %}
+
+{% macro create_form_line(form_item) -%}
+  <div class="input-group">
+    <span class="input-group-addon">{{ form_item.label.text}}:</span>
+    {{ form_item(class_ = 'form-control', placeholder = form_item.label.text, required = true) }}
+  </div>
+{%- endmacro %}
+
+{% block title %}UNHCR Level 2 Registration{% endblock %}
+{% block content %}
+  <form method="post" class="form form-reset">
+    <h1 class="form-heading">UNHCR Level 2 Registration<a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h1>
+    <h2>{{ person.name }}</h2>
+
+    <div style="padding-bottom:10px;">
+
+      {{ create_form_line(form.date_of_birth) }}
+      {{ create_form_line(form.marital_status) }}
+      {{ create_form_line(form.citizenship) }}
+      {{ create_form_line(form.education) }}
+      {{ create_form_line(form.occupation) }}
+      {{ create_form_line(form.religion) }}
+      {{ create_form_line(form.ethnic_origin) }}
+      <h4>Place of Origin</h4>
+      {{ create_form_line(form.address1) }}
+      {{ create_form_line(form.address2) }}
+      {{ create_form_line(form.city) }}
+      {{ create_form_line(form.region) }}
+      {{ create_form_line(form.postal_code) }}
+      {{ create_form_line(form.country) }}
+    </div>
+
+    <input type="submit" value="Submit" class="btn btn-lg btn-primary btn-block" disabled>
+  </form>
+{% endblock %}
