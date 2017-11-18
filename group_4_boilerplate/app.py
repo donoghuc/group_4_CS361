@@ -65,8 +65,9 @@ def register():
     person.setPlaceOfOrigin()
     person.setCampLocation()
     form = Reg2Form(request.form)
-    form.process()
+    # form.process()
     if request.method == 'POST' and form.validate():
+        print('here')
         print(form.name.data)
     return render_template('forms/register.html', person=person, form=form)
 
