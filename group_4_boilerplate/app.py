@@ -2,7 +2,7 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, render_template_string, json
 from flask_sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
@@ -83,19 +83,48 @@ def reg2():
     # If get request has /reg2?file_number=<file_number>
     if 'file_number' in request.args:
         file_number = request.args['file_number']
+        new_entity = 0
+
         # TODO get person from sql database
-    else:
         person = Person('John M Doe', '2010-10-20', 'married', 'American',
                         'High School', 'Mason', 'Agnostic', 'White',
                         '2017-11-16')
         person.setPlaceOfOrigin('123 Pleasant St', '', 'Sharpsburg',
                                 'MD', '12345', 'US')
         person.setCampLocation('23F', 'D', '4')
+    else:
+        person = Person()
+        new_entity = 1
 
     form = Reg2Form(request.form)
     form.marital_status.default = person.marital_status.lower()
     form.process()
-    return render_template('forms/registration2.html', person=person, form=form)
+    return render_template('forms/registration2.html', person=person,
+                           form=form, new_entity=new_entity)
+
+
+@app.route('/reg2db', methods=['GET', 'POST'])
+def reg2db():
+
+    person = Person(**request.form)
+    person.setPlaceOfOrigin(**request.form)
+    person.setCampLocation(**request.form)
+    new_entity = int(request.form['new_entity'])
+
+    # Check person entity data in console
+    # app.logger.info(person.__dict__)
+    # app.logger.info(person.place_of_origin.__dict__)
+    # app.logger.info(person.camp_location.__dict__)
+    # app.logger.info('New Entity: ' + str(new_entity))
+
+    # TODO insert/update database with info
+    # insert if new_entity == 1, otherwise update
+
+    # Check post request data
+    # This is temporary for checking data
+    # Eventually maybe reroute to another page
+    return json.jsonify(request.form)
+
 
 # Error handlers.
 

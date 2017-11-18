@@ -1,30 +1,31 @@
 {% extends 'layouts/form.html' %}
 
-{% macro create_form_line(form_item, value) -%}
+{% macro create_form_line(form_item, value, required=true) -%}
   <div class="input-group">
     <span class="input-group-addon">{{ form_item.label.text}}:</span>
     {{ form_item(class_ = 'form-control', placeholder = form_item.label.text,
-       required = true, value=value) }}
+       required=required, value=value) }}
   </div>
 {%- endmacro %}
 
 {% block title %}UNHCR Level 2 Registration{% endblock %}
 {% block content %}
-  <form method="post" class="form form-reset">
+  <form method="post" class="form form-reset" action="/reg2db">
     <h1 class="form-heading">UNHCR Level 2 Registration<a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h1>
 
     <div style="padding-bottom:10px;">
+      <input type="hidden" name="new_entity" value="{{ new_entity }}">
       {{ create_form_line(form.name, person.name) }}
       {{ create_form_line(form.date_of_birth, person.date_of_birth) }}
       {{ create_form_line(form.marital_status, person.marital_status) }}
       {{ create_form_line(form.citizenship, person.citizenship) }}
-      {{ create_form_line(form.education, person.education) }}
-      {{ create_form_line(form.occupation, person.occupation) }}
-      {{ create_form_line(form.religion, person.religion) }}
-      {{ create_form_line(form.ethnic_origin, person.ethnic_origin) }}
+      {{ create_form_line(form.education, person.education, false) }}
+      {{ create_form_line(form.occupation, person.occupation, false) }}
+      {{ create_form_line(form.religion, person.religion, false) }}
+      {{ create_form_line(form.ethnic_origin, person.ethnic_origin, false) }}
       <h4>Place of Origin:</h4>
       {{ create_form_line(form.address1, person.place_of_origin.address1) }}
-      {{ create_form_line(form.address2, person.place_of_origin.address2) }}
+      {{ create_form_line(form.address2, person.place_of_origin.address2, false) }}
       {{ create_form_line(form.city, person.place_of_origin.city) }}
       {{ create_form_line(form.region, person.place_of_origin.region) }}
       {{ create_form_line(form.postal_code, person.place_of_origin.postal_code) }}
@@ -36,6 +37,6 @@
       {{ create_form_line(form.date_of_arrival, person.date_of_arrival) }}
     </div>
 
-    <input type="submit" value="Submit" class="btn btn-lg btn-primary btn-block" disabled>
+    <input type="submit" value="Submit" class="btn btn-lg btn-primary btn-block">
   </form>
 {% endblock %}
