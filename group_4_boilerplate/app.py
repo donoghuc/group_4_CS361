@@ -2,7 +2,7 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request, render_template_string, json
+from flask import Flask, render_template, request, render_template_string, json, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
@@ -66,9 +66,13 @@ def register():
     person.setCampLocation()
     form = Reg2Form(request.form)
     # form.process()
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST':
+        form.validate_on_submit()
         print('here')
         print(form.name.data)
+        person.build_person_from_form(form)
+        print(repr(person))
+        return redirect(url_for('home'))
     return render_template('forms/register.html', person=person, form=form)
 
 

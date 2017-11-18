@@ -40,3 +40,10 @@ class Person:
 
     def setCampLocation(self, *args, **kwargs):
         self.camp_location = CampLocation(*args, **kwargs)
+
+    def build_person_from_form(self, form):
+        self.name = form.name.data
+        self.date_of_birth = form.date_of_birth.data
+
+    def __repr__(self):
+        return "{},{}".format(self.name, self.date_of_birth)
