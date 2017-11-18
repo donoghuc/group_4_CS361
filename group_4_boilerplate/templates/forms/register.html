@@ -1,14 +1,44 @@
+
+
+
 {% extends 'layouts/form.html' %}
-{% block title %}Register{% endblock %}
+
+{% macro create_form_line(form_item) -%}
+  <div class="input-group">
+    <span class="input-group-addon">{{ form_item.label.text}}:</span>
+    {{ form_item(class_ = 'form-control', placeholder = form_item.label.text,
+       required = true) }}
+  </div>
+{%- endmacro %}
+
+{% block title %}UNHCR  Registration{% endblock %}
 {% block content %}
-  <form method="post" class="form">
-    <h3 class="form-heading">Register <a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h3>
-    {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
-    {{ form.email(class_ = 'form-control', placeholder = form.email.label.text, required = true) }}
-    {{ form.password(class_ = 'form-control', placeholder = form.password.label.text, required = true) }}
-    {{ form.confirm(class_ = 'form-control last-input', placeholder = form.confirm.label.text, required = true) }}
-    <p class="pull-left"><a href="{{ url_for('login') }}">Login</a></p>
-    <input type="submit" value="Register" class="btn btn-primary btn-lg btn-block"  disabled>
-    <p>You must add database as well as Flask-Login to enable user management. See the <a href="http://www.realpython.com">Real Python</a> course for more info!</p>
+  <form method="post" class="form form-reset">
+    <h1 class="form-heading">UNHCR Registration<a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h1>
+
+    <div style="padding-bottom:10px;">
+      {{ create_form_line(form.name) }}
+      {{ create_form_line(form.date_of_birth) }}
+      {{ create_form_line(form.marital_status) }}
+      {{ create_form_line(form.citizenship) }}
+      {{ create_form_line(form.education) }}
+      {{ create_form_line(form.occupation) }}
+      {{ create_form_line(form.religion) }}
+      {{ create_form_line(form.ethnic_origin) }}
+      <h4>Place of Origin:</h4>
+      {{ create_form_line(form.address1) }}
+      {{ create_form_line(form.address2) }}
+      {{ create_form_line(form.city) }}
+      {{ create_form_line(form.region) }}
+      {{ create_form_line(form.postal_code) }}
+      {{ create_form_line(form.country) }}
+      <h4>Current Location:</h4>
+      {{ create_form_line(form.shelter_number) }}
+      {{ create_form_line(form.block) }}
+      {{ create_form_line(form.section) }}
+      {{ create_form_line(form.date_of_arrival) }}
+    </div>
+
+    <input type="submit" value="Submit" class="btn btn-lg btn-primary btn-block" >
   </form>
 {% endblock %}

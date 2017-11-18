@@ -60,13 +60,15 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm(request.form)
-    if form.validate_on_submit():
-        print(form.name)
-        return redirect('/')
-    else:
-        print('error')
-    return render_template('forms/register.html', form=form)
+    
+    person = Person()
+    person.setPlaceOfOrigin()
+    person.setCampLocation()
+    form = Reg2Form(request.form)
+    form.process()
+    if request.method == 'POST' and form.validate():
+        print(form.name.data)
+    return render_template('forms/register.html', person=person, form=form)
 
 
 @app.route('/forgot')
