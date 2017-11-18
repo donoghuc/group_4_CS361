@@ -1,6 +1,7 @@
 from flask_wtf import Form
 from wtforms import TextField, PasswordField
 from wtforms.fields.html5 import DateField, IntegerField
+from wtforms.fields import SelectField
 from wtforms.validators import DataRequired, EqualTo, Length
 
 # Set your classes here.
@@ -35,24 +36,29 @@ class ForgotForm(Form):
 
 
 class Reg2Form(Form):
+    name = TextField('Name', validators=[DataRequired()])
     date_of_birth = DateField('Date of Birth', validators=[DataRequired()])
-
-    # Maybe change marital_status, citizenship, and education to dropdown boxes
-    marital_status = TextField('Marital Status', validators=[DataRequired()])
+    marital_status = SelectField('Marital Status',
+                                 choices=[('single', 'Single'),
+                                          ('married', 'Married'),
+                                          ('divorced', 'Divorced'),
+                                          ('widowed', 'Widowed')])
     citizenship = TextField('Citizenship', validators=[DataRequired()])
     education = TextField('Education', validators=[DataRequired()])
-
     occupation = TextField('Occupation', validators=[DataRequired()])
-
-    # Dropdown box
     religion = TextField('Religion', validators=[DataRequired()])
     ethnic_origin = TextField('Ethnic Origin', validators=[DataRequired()])
 
+    # Address
     address1 = TextField('Address Line 1', validators=[DataRequired()])
     address2 = TextField('Address Line 2', validators=[DataRequired()])
     city = TextField('City', validators=[DataRequired()])
     region = TextField('State/Province/Region', validators=[DataRequired()])
     postal_code = IntegerField('Zip/Postal Code', validators=[DataRequired()])
-
-    # Dropdown box
     country = TextField('Country', validators=[DataRequired()])
+
+    # Current Location
+    shelter_number = TextField('Shelter Number', validators=[DataRequired()])
+    block = TextField('Block', validators=[DataRequired()])
+    section = TextField('Section', validators=[DataRequired()])
+    date_of_arrival = DateField('Date of Arrival', validators=[DataRequired()])

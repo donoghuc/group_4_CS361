@@ -8,6 +8,7 @@ import logging
 from logging import Formatter, FileHandler
 from forms import *
 import os
+from refugee import Person
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -74,10 +75,23 @@ def forgot():
     return render_template('forms/forgot.html', form=form)
 
 
-@app.route('/reg2')
-def test():
-    person = {"name": "John Doe"}
+@app.route('/reg2', methods=['GET'])
+def reg2():
+    # If get request has /reg2?file_number=<file_number>
+    if 'file_number' in request.args:
+        file_number = request.args['file_number']
+        # TODO get person from sql database
+    else:
+        person = Person('John M Doe', '2010-10-20', 'married', 'American',
+                        'High School', 'Mason', 'Agnostic', 'White',
+                        '2017-11-16')
+        person.setPlaceOfOrigin('123 Pleasant St', '', 'Sharpsburg',
+                                'MD', '12345', 'US')
+        person.setCampLocation('23F', 'D', '4')
+
     form = Reg2Form(request.form)
+    form.marital_status.default = person.marital_status.lower()
+    form.process()
     return render_template('forms/registration2.html', person=person, form=form)
 
 # Error handlers.

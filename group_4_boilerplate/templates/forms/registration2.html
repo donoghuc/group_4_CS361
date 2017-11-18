@@ -1,9 +1,10 @@
 {% extends 'layouts/form.html' %}
 
-{% macro create_form_line(form_item) -%}
+{% macro create_form_line(form_item, value) -%}
   <div class="input-group">
     <span class="input-group-addon">{{ form_item.label.text}}:</span>
-    {{ form_item(class_ = 'form-control', placeholder = form_item.label.text, required = true) }}
+    {{ form_item(class_ = 'form-control', placeholder = form_item.label.text,
+       required = true, value=value) }}
   </div>
 {%- endmacro %}
 
@@ -11,24 +12,28 @@
 {% block content %}
   <form method="post" class="form form-reset">
     <h1 class="form-heading">UNHCR Level 2 Registration<a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h1>
-    <h2>{{ person.name }}</h2>
 
     <div style="padding-bottom:10px;">
-
-      {{ create_form_line(form.date_of_birth) }}
-      {{ create_form_line(form.marital_status) }}
-      {{ create_form_line(form.citizenship) }}
-      {{ create_form_line(form.education) }}
-      {{ create_form_line(form.occupation) }}
-      {{ create_form_line(form.religion) }}
-      {{ create_form_line(form.ethnic_origin) }}
-      <h4>Place of Origin</h4>
-      {{ create_form_line(form.address1) }}
-      {{ create_form_line(form.address2) }}
-      {{ create_form_line(form.city) }}
-      {{ create_form_line(form.region) }}
-      {{ create_form_line(form.postal_code) }}
-      {{ create_form_line(form.country) }}
+      {{ create_form_line(form.name, person.name) }}
+      {{ create_form_line(form.date_of_birth, person.date_of_birth) }}
+      {{ create_form_line(form.marital_status, person.marital_status) }}
+      {{ create_form_line(form.citizenship, person.citizenship) }}
+      {{ create_form_line(form.education, person.education) }}
+      {{ create_form_line(form.occupation, person.occupation) }}
+      {{ create_form_line(form.religion, person.religion) }}
+      {{ create_form_line(form.ethnic_origin, person.ethnic_origin) }}
+      <h4>Place of Origin:</h4>
+      {{ create_form_line(form.address1, person.place_of_origin.address1) }}
+      {{ create_form_line(form.address2, person.place_of_origin.address2) }}
+      {{ create_form_line(form.city, person.place_of_origin.city) }}
+      {{ create_form_line(form.region, person.place_of_origin.region) }}
+      {{ create_form_line(form.postal_code, person.place_of_origin.postal_code) }}
+      {{ create_form_line(form.country, person.place_of_origin.country) }}
+      <h4>Current Location:</h4>
+      {{ create_form_line(form.shelter_number, person.camp_location.shelter_number) }}
+      {{ create_form_line(form.block, person.camp_location.block) }}
+      {{ create_form_line(form.section, person.camp_location.section) }}
+      {{ create_form_line(form.date_of_arrival, person.date_of_arrival) }}
     </div>
 
     <input type="submit" value="Submit" class="btn btn-lg btn-primary btn-block" disabled>
