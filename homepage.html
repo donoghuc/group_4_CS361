@@ -6,39 +6,26 @@ form {
 }
 
 input[type=text], input[type=password] {
-    width: 100%;
+    width: 70%;
     padding: 12px 20px;
-    margin: 8px 0;
+    margin: auto;
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
 }
 
-button{
-    background-color: white; 
-    color: black; 
-    border: 2px solid #4CAF50;
-    padding: 16px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-    cursor: pointer;
-}
-
-.button:hover {
+button.forgotten{
     background-color: #4CAF50;
     color: white;
-    display: block;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 20%;
 }
 
-.cancelbtn {
-    width: auto;
-    padding: 10px 18px;
-    background-color: #f44336;
+button.forgotten:hover{	
+	opacity: 0.8;
 }
 
 img.avatar {
@@ -82,18 +69,16 @@ span.psw {
 
   <div class="container">
     <label><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" required>
-    <button type="button buttons" class="forgotusernamebtn">Forgot Username?</button>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+    <button type="buttons" class="forgotten"> Forgot Username?</button>
 
     <label><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
-    <button type="button buttons" class="forgotpasswordbtn">Forgot Username?</button>
+    <input type="password"placeholder="Enter Password" name="psw" required>]    
+    <button type="buttons" class="forgotten"> Forgot Username?</button>
+
         
-    <button type="submit">Login</button>
+    <button type="submit" >Login</button>
     <input type="checkbox" checked="checked"> Remember me
   </div>
 
 </form>
-
-</body>
-</html>
