@@ -60,7 +60,7 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    
+
     person = Person()
     person.setPlaceOfOrigin()
     person.setCampLocation()
@@ -107,7 +107,7 @@ def reg2():
                            form=form, new_entity=new_entity)
 
 
-@app.route('/reg2db', methods=['GET', 'POST'])
+@app.route('/reg2db', methods=['POST'])
 def reg2db():
 
     person = Person(**request.form)
