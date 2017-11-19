@@ -1,48 +1,92 @@
 <!DOCTYPE html>
 <html>
-<body class="main-pages">
-    <header>
-      <nav>
-        <ul class="navbar-list">
-        </ul>
-      </nav>
+<style>
+form {
+    border: 3px solid #f1f1f1;
+}
 
-		</header>
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
 
-  <head>
-    <title>UNHCR</title>
-    <meta  charset="utf-8">
-    <link href="style.css" rel="stylesheet" type="text/css">
-</head>
-<main>
-	<section class="top-picture">
-      <img src="http://geology.com/google-earth/google-earth.jpg">
-    </section>
-	<form action="action" method="get">
- 	    Username: <input type="text" name="fname"><br>
-	</form>
-      <div class="forgot-username-button">
-        <button id="forgot-username">Forgot Username?</button>
-      </div>
-	 <form action="action" method="get">
- 	    Password: <input type="text" name="fname"><br>
-	</form>
-    <div class="forgot-password-button">
-        <button id="forgot-password">Forgot Password?</button>
-     </div>
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
 
-	   <div class="enter-button">
-        <button id="enter">Enter</button>
-      </div>
+button:hover {
+    opacity: 0.8;
+}
 
-    </main>
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+}
 
-    <footer>
-      <div class="copyright">
-        Copyright &copy; 2017
-      </div>
-    </footer>
+img.avatar {
+    border: 1px solid #ddd;
+    border-radius: 70%;
+    padding:10px;
+    max-width: 70%;
+    height: 50%;
+    display: block;
+    margin: auto;
+}
 
-  </body>
+.container {
+    padding: 10px;
+}
 
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 100%;
+    }
+}
+</style>
+<body>
+
+<h2>Login Form</h2>
+
+<form action="/action_page.php">
+  <div class="imgcontainer">
+   <img src="http://geology.com/google-earth/google-earth.jpg" alt="picture" class="avatar">
+  </div>
+
+  <div class="container">
+    <label><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+    <button type="button" class="forgotusernamebtn">Forgot Username?</button>
+
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+    <button type="button" class="forgotpasswordbtn">Forgot Username?</button>
+        
+    <button type="submit">Login</button>
+    <input type="checkbox" checked="checked"> Remember me
+  </div>
+
+</form>
+
+</body>
 </html>
