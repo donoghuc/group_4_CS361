@@ -3,7 +3,6 @@
 #----------------------------------------------------------------------------#
 
 from flask import Flask, render_template, request, render_template_string, json, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
 from forms import *
@@ -67,7 +66,6 @@ def register():
     person.setPlaceOfOrigin()
     person.setCampLocation()
     form = Reg2Form(request.form)
-    # form.process()
     if request.method == 'POST':
         form.validate_on_submit()
         print('here')
