@@ -51,9 +51,9 @@ class Person:
         self.religion = form.religion.data 
         self.ethnic_origin = form.ethnic_origin.data 
         self.date_of_arrival = form.date_of_arrival.data 
-        self.place_of_origin = Address(form.address1.data, form.city.data, form.region.data, form.postal_code, form.country)
+        self.place_of_origin = Address(form.address1.data, form.city.data, form.region.data, form.postal_code.data, form.country.data)
         self.camp_location = CampLocation(form.shelter_number.data, form.block.data, form.section.data)
 
 
     def __repr__(self):
-        return "{},{}".format(self.name, self.date_of_birth)
+        return "{},{},{}".format(self.name, self.date_of_birth, self.date_of_arrival)
