@@ -42,8 +42,18 @@ class Person:
         self.camp_location = CampLocation(*args, **kwargs)
 
     def build_person_from_form(self, form):
-        self.name = form.name.data
-        self.date_of_birth = form.date_of_birth.data
+        self.name = form.name.data 
+        self.date_of_birth = form.date_of_birth.data 
+        self.marital_status = form.marital_status.data 
+        self.citizenship = form.citizenship.data 
+        self.education = form.education.data 
+        self.occupation = form.occupation.data 
+        self.religion = form.religion.data 
+        self.ethnic_origin = form.ethnic_origin.data 
+        self.date_of_arrival = form.date_of_arrival.data 
+        self.place_of_origin = Address(form.address1.data, form.city.data, form.region.data, form.postal_code, form.country)
+        self.camp_location = CampLocation(form.shelter_number.data, form.block.data, form.section.data)
+
 
     def __repr__(self):
         return "{},{}".format(self.name, self.date_of_birth)

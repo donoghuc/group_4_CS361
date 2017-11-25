@@ -9,6 +9,7 @@ from logging import Formatter, FileHandler
 from forms import *
 import os
 from refugee import Person
+import make_database as db
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -16,7 +17,8 @@ from refugee import Person
 
 app = Flask(__name__)
 app.config.from_object('config')
-db = SQLAlchemy(app)
+
+# db = SQLAlchemy(app)
 
 # Automatically tear down SQLAlchemy.
 
@@ -27,15 +29,15 @@ db = SQLAlchemy(app)
 
 # Login required decorator.
 
-def login_required(test):
-    @wraps(test)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return test(*args, **kwargs)
-        else:
-            flash('You need to login first.')
-            return redirect(url_for('login'))
-    return wrap
+# def login_required(test):
+#     @wraps(test)
+#     def wrap(*args, **kwargs):
+#         if 'logged_in' in session:
+#             return test(*args, **kwargs)
+#         else:
+#             flash('You need to login first.')
+#             return redirect(url_for('login'))
+#     return wrap
 
 #----------------------------------------------------------------------------#
 # Controllers.
@@ -69,9 +71,11 @@ def register():
     if request.method == 'POST':
         form.validate_on_submit()
         print('here')
-        print(form.name.data)
+        print(form.occupation.data)
         person.build_person_from_form(form)
         print(repr(person))
+        print(db.DATABASE_CON)
+        db.refugee_db_insertion(person, db.DATABASE_CON)
         return redirect(url_for('home'))
     return render_template('forms/register.html', person=person, form=form)
 

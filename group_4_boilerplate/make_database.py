@@ -1,5 +1,9 @@
 import sqlite3
 import os
+import sys
+from refugee import Person
+
+DATABASE_CON = os.path.join(os.getcwd(),"pythonsqlite.db")
 
 def create_connection(db_file):
     """ create a database connection to the SQLite database
@@ -29,14 +33,13 @@ def create_table(conn, create_table_sql):
         print(e)
         
 
-
-def main():
-    PATH = os.getcwd()
-
-    database = os.path.join(PATH,"pythonsqlite.db")
+def create_tables(database):
+    """ declare sqlite schema
+    """
  
     create_person_table = """ CREATE TABLE IF NOT EXISTS Person (
                                         person_id integer PRIMARY KEY,
+                                        name text NOT NULL,
                                         date_of_birth text NOT NULL,
                                         marital_status text NOT NULL,
                                         citizenship text NOT NULL,
@@ -50,6 +53,7 @@ def main():
     create_origin_address_table = """CREATE TABLE IF NOT EXISTS Origin_Address (
                                     addr_id integer PRIMARY KEY,
                                     address text NOT NULL,
+                                    region text NOT NULL,
                                     city text NOT NULL,
                                     postal_code text NOT NULL,
                                     country text NOT NULL
@@ -89,35 +93,78 @@ def main():
         create_table(conn, create_person_camp_table)        
     else:
         print("Error! cannot create the database connection.")
+    conn.commit()
+    conn.close()
         
+
+
+def refugee_db_insertion(prsn, database):
+    """ Add a row to database to verify table creation
+        Args: person object to add into database
+    """
     keys = dict()
+    conn = create_connection(database)
+    print(repr(prsn))
+
+    if not conn:
+        sys.exit('Error, cannon create db connection')
     cur = conn.cursor()
-    cur.execute("""INSERT INTO Person (date_of_birth,
+
+    cur.execute("""INSERT INTO Person (name,
+                                        date_of_birth,
                                         marital_status,
                                         citizenship,
                                         education,
                                         occupation,
                                         religion,
                                         ethnic_origin,
-                                        date_of_arrival) VALUES (?,?,?,?,?,?,?,?);""", ("jan","mar","usa","col","na","na","na","apr")) 
+                                        date_of_arrival) VALUES (?,?,?,?,?,?,?,?,?);""", (prsn.name,
+                                                                                        prsn.date_of_birth,
+                                                                                        prsn.marital_status,
+                                                                                        prsn.citizenship,
+                                                                                        prsn.education,
+                                                                                        prsn.occupation,
+                                                                                        prsn.religion,
+                                                                                        prsn.ethnic_origin,
+                                                                                        prsn.date_of_arrival)) 
     keys['person_id'] = cur.lastrowid
     
     cur.execute("""INSERT INTO Origin_Address (address,
                                                city,
+                                               region,
                                                postal_code,
-                                               country) VALUES (?,?,?,?);""", ("jan","mar","usa","col"))
+                                               country) VALUES (?,?,?,?,?);""", (prsn.place_of_origin.address1,
+                                                                               prsn.place_of_origin.city,
+                                                                               prsn.place_of_origin.region,
+                                                                               prsn.place_of_origin.postal_code,
+                                                                               prsn.place_of_origin.country))
     keys['addr_id'] = cur.lastrowid
     
     cur.execute("""INSERT INTO Camp_Locations (shelter_number,
                                                block,
-                                               section) VALUES (?,?,?);""", ("jan","mar","usa"))
+                                               section) VALUES (?,?,?);""", (prsn.camp_location.shelter_number,
+                                                                             prsn.camp_location.block,
+                                                                             prsn.camp_location.section))
     keys['camp_id'] = cur.lastrowid
-    
+
     cur.execute("""INSERT INTO Person_Origin (person_id,
                                                addr_id) VALUES (?,?);""", (keys['person_id'],keys['addr_id']))
     
     cur.execute("""INSERT INTO Person_Camp (person_id,
                                                camp_id) VALUES (?,?);""", (keys['person_id'],keys['camp_id']))
+
+    conn.commit()
+    conn.close()
+    
+def execute_test_join(database):
+    """ test table creation by making join based queries
+    """
+    
+    conn = create_connection(database)
+
+    if not conn:
+        sys.exit('Error, cannon create db connection')
+    cur = conn.cursor()
     
     print(cur.execute("""SELECT * FROM Person p 
                       INNER JOIN Person_Camp pc
@@ -126,7 +173,20 @@ def main():
                       ON pc.camp_id = cl.camp_id""").fetchall())
     print(cur.execute("""SELECT * FROM Person_Camp""").fetchall())
     print(cur.execute("""SELECT * FROM Camp_Locations""").fetchall())
-    
+    print(cur.execute("""SELECT * FROM Person""").fetchall())
+    conn.close()
 
 if __name__ == '__main__':
-    main()
+
+    person = Person('John M Doe', '2010-10-20', 'married', 'American',
+                    'High School', 'Mason', 'Agnostic', 'White',
+                    '2017-11-16')
+    person.setPlaceOfOrigin('123 Pleasant St', '', 'Sharpsburg',
+                            'MD', '12345', 'US')
+    person.setCampLocation('23F', 'D', '4')
+
+
+
+    create_tables(DATABASE_CON)
+    refugee_db_insertion(person, DATABASE_CON)
+    execute_test_join(DATABASE_CON)
