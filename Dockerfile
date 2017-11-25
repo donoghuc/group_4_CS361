@@ -14,10 +14,10 @@ RUN pip install flask_wtf
 
 # copy over source code
 RUN mkdir /web_app && mkdir /web_app/static && mkdir /web_app/templates
-COPY group_4_boilerplate/app.py /web_app
-COPY group_4_boilerplate/forms.py /web_app
-COPY group_4_boilerplate/make_database.py /web_app
-COPY group_4_boilerplate/refugee.py /web_app
-COPY group_4_boilerplate/config.py /web_app
-COPY group_4_boilerplate/static /web_app/static/
-COPY group_4_boilerplate/templates /web_app/templates/
+COPY web_app/app.py /web_app
+COPY web_app/forms.py /web_app
+COPY web_app/make_database.py /web_app
+COPY web_app/refugee.py /web_app
+COPY web_app/config.py /web_app
+COPY web_app/static /web_app/static/
+COPY web_app/templates /web_app/templates/
