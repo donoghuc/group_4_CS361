@@ -37,7 +37,7 @@ class ForgotForm(Form):
 
 class Reg2Form(Form):
     name = TextField('Name', validators=[DataRequired()])
-    date_of_birth = DateField('Date of Birth', validators=[DataRequired()], format='%m-%d-%Y')
+    date_of_birth = DateField('Date of Birth', validators=[DataRequired()], format='%Y-%m-%d')
     marital_status = SelectField('Marital Status',
                                  choices=[('single', 'Single'),
                                           ('married', 'Married'),
@@ -61,4 +61,4 @@ class Reg2Form(Form):
     shelter_number = TextField('Shelter Number', validators=[DataRequired()])
     block = TextField('Block', validators=[DataRequired()])
     section = TextField('Section', validators=[DataRequired()])
-    date_of_arrival = DateField('Date of Arrival', validators=[DataRequired()], format='%m-%d-%Y')
+    date_of_arrival = DateField('Date of Arrival', validators=[DataRequired()], format='%Y-%m-%d')

@@ -61,20 +61,26 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """ This view will handle the refugee registration form
+        Get and validate data and push to database
+    """
 
+    # Intialize empty person object
     person = Person()
     person.setPlaceOfOrigin()
     person.setCampLocation()
+    # get form data
     form = Reg2Form(request.form)
     if request.method == 'POST':
+        # validate form data
         form.validate_on_submit()
-        print('here')
-        print(form.occupation.data)
+        # set state of person based on validated form data
         person.build_person_from_form(form)
-        print(repr(person))
-        print(db.DATABASE_CON)
+        # Insert person into database
         db.refugee_db_insertion(person, db.DATABASE_CON)
+        # redirect to home. 
         return redirect(url_for('home'))
+    # render form for collecting registration data. 
     return render_template('forms/register.html', person=person, form=form)
 
 
