@@ -1,87 +1,89 @@
 <!DOCTYPE html>
 <html>
 <style>
-form {
-    border: 3px solid #f1f1f1;
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+.login-page {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+}
+.form {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.form button {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #4CAF50;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+.form button:hover,.form button:active,.form button:focus {
+  background: #43A047;
+}
+.form .message {
+  margin: 15px 0 0;
+  color: #b3b3b3;
+  font-size: 12px;
+}
+.form .message a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+.form .register-form {
+  display: none;
 }
 
-input[type=text], input[type=password] {
-    width: 70%;
-    padding: 12px 20px;
-    margin: auto;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
+body {
+  background: #76b852; /* fallback for old browsers */
+  background: -webkit-linear-gradient(right, #76b852, #8DC26F);
+  background: -moz-linear-gradient(right, #76b852, #8DC26F);
+  background: -o-linear-gradient(right, #76b852, #8DC26F);
+  background: linear-gradient(to left, #76b852, #8DC26F);
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;      
 }
-
-button.forgotten{
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 20%;
-}
-
-button.forgotten:hover{	
-	opacity: 0.8;
-}
-
-img.avatar {
-    border: 1px solid #ddd;
-    border-radius: 70%;
-    padding:10px;
-    max-width: 70%;
-    height: 50%;
-    display: block;
-    margin: auto;
-}
-
-.container {
-    padding: 10px;
-}
-
-span.psw {
-    float: right;
-    padding-top: 16px;
-}
-
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-    span.psw {
-       display: block;
-       float: none;
-    }
-    .cancelbtn {
-       width: 100%;
-    }
-}
-</style>
 <body>
-
-<h2>Login Form</h2>
-
-<form action=""/action_page.php"">
-  <div class="imgcontainer">
-   <img src="http://geology.com/google-earth/google-earth.jpg" alt="picture" class="avatar">
+</style>
+<div class="login-page">
+  <div class="form">
+    <form class="login-form">
+	  <p>U. N. H. C. R.</p>
+	  <img src="Earth.jpg" alt="Earth" style="width:128px;height:128px;">
+      <input type="text" placeholder="username"/>
+      <p class="message"><a href="#">Forgot Username?</a></p>
+      <input type="password" placeholder="password"/>
+      <p class="message"><a href="#">Forgot Password?</a></p>
+      <button>login</button>
+      <p class="message">Not registered? <a href="#">Create an account</a></p>
+    </form>
   </div>
-
-  <div class="container">
-     Username:<br>
-    <input type="password" placeholder="Enter Password" name="psw" required>
-    <button type="buttons" class="forgotten"> Forgot Username?</button>
-
-	Password:<br>	
-	<input type="password" name="psw" required>
-	  <button type="buttons" class="forgotten" minlength="12">Forgot Password?</button>
-	
-    <br><br> 
-    <button type="submit" >Login</button>
-    <input type="checkbox" checked="checked"> Remember me
-	
-	  <button type="new-user"><a href="files/create-user-page-1.html">New User</a></button>
-  </div>
-
-</form>
+</div>
+</body>
 </html>
