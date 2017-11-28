@@ -16,7 +16,7 @@ def create_connection(db_file):
         return conn
     except Error as e:
         print(e)
- 
+
     return None
 
 
@@ -31,12 +31,12 @@ def create_table(conn, create_table_sql):
         c.execute(create_table_sql)
     except Error as e:
         print(e)
-        
+
 
 def create_tables(database):
     """ declare sqlite schema
     """
- 
+
     create_person_table = """ CREATE TABLE IF NOT EXISTS Person (
                                         person_id integer PRIMARY KEY,
                                         name text NOT NULL,
@@ -49,7 +49,7 @@ def create_tables(database):
                                         ethnic_origin text NOT NULL,
                                         date_of_arrival text NOT NULL
                                     ); """
- 
+
     create_origin_address_table = """CREATE TABLE IF NOT EXISTS Origin_Address (
                                     addr_id integer PRIMARY KEY,
                                     address text NOT NULL,
@@ -58,25 +58,25 @@ def create_tables(database):
                                     postal_code text NOT NULL,
                                     country text NOT NULL
                                 );"""
-    
+
     create_camp_locations_table = """CREATE TABLE IF NOT EXISTS Camp_Locations (
                                     camp_id integer PRIMARY KEY,
                                     shelter_number text NOT NULL,
                                     block text NOT NULL,
                                     section text NOT NULL
                                 );"""
- 
+
     create_person_origin_table = """CREATE TABLE IF NOT EXISTS Person_Origin (
                                     unique_id  integer PRIMARY KEY,
-                                    person_id integer NOT NULL, 
+                                    person_id integer NOT NULL,
                                     addr_id integer NOT NULL,
                                     FOREIGN KEY (person_id) REFERENCES Person(person_id),
                                     FOREIGN KEY (addr_id) REFERENCES Origin_Address(addr_id)
                                 );"""
-    
+
     create_person_camp_table = """CREATE TABLE IF NOT EXISTS Person_Camp (
                                     unique_id integer PRIMARY KEY,
-                                    person_id integer NOT NULL, 
+                                    person_id integer NOT NULL,
                                     camp_id integer NOT NULL,
                                     FOREIGN KEY (person_id) REFERENCES Person(person_id),
                                     FOREIGN KEY (camp_id) REFERENCES Camp_Locations(camp_id)
@@ -90,12 +90,12 @@ def create_tables(database):
         create_table(conn, create_origin_address_table)
         create_table(conn, create_camp_locations_table)
         create_table(conn, create_person_origin_table)
-        create_table(conn, create_person_camp_table)        
+        create_table(conn, create_person_camp_table)
     else:
         print("Error! cannot create the database connection.")
     conn.commit()
     conn.close()
-        
+
 
 
 def refugee_db_insertion(prsn, database):
@@ -126,9 +126,9 @@ def refugee_db_insertion(prsn, database):
                                                                                         prsn.occupation,
                                                                                         prsn.religion,
                                                                                         prsn.ethnic_origin,
-                                                                                        prsn.date_of_arrival)) 
+                                                                                        prsn.date_of_arrival))
     keys['person_id'] = cur.lastrowid
-    
+
     cur.execute("""INSERT INTO Origin_Address (address,
                                                city,
                                                region,
@@ -139,7 +139,7 @@ def refugee_db_insertion(prsn, database):
                                                                                prsn.place_of_origin.postal_code,
                                                                                prsn.place_of_origin.country))
     keys['addr_id'] = cur.lastrowid
-    
+
     cur.execute("""INSERT INTO Camp_Locations (shelter_number,
                                                block,
                                                section) VALUES (?,?,?);""", (prsn.camp_location.shelter_number,
@@ -149,24 +149,58 @@ def refugee_db_insertion(prsn, database):
 
     cur.execute("""INSERT INTO Person_Origin (person_id,
                                                addr_id) VALUES (?,?);""", (keys['person_id'],keys['addr_id']))
-    
+
     cur.execute("""INSERT INTO Person_Camp (person_id,
                                                camp_id) VALUES (?,?);""", (keys['person_id'],keys['camp_id']))
 
     conn.commit()
     conn.close()
-    
-def execute_test_join(database):
-    """ test table creation by making join based queries
-    """
-    
+
+
+def refugee_db_selection(person_id, database):
+
     conn = create_connection(database)
 
     if not conn:
         sys.exit('Error, cannon create db connection')
     cur = conn.cursor()
-    
-    print(cur.execute("""SELECT * FROM Person p 
+
+    result = cur.execute("""SELECT p.person_id, p.name, p.date_of_birth, p.marital_status,
+                       p.citizenship, p.education, p.occupation, p.religion, p.ethnic_origin,
+                       p.date_of_arrival,
+                       oa.address, oa.city, oa.region, oa.postal_code, oa.country,
+                       cl.shelter_number, cl.block, cl.section
+                       FROM Person p
+                       INNER JOIN Person_Origin po ON po.person_id = p.person_id
+                       INNER JOIN Origin_Address oa ON oa.addr_id = po.addr_id
+                       INNER JOIN Person_Camp pc ON pc.person_id = p.person_id
+                       INNER JOIN Camp_Locations cl ON cl.camp_id = pc.camp_id
+                       WHERE p.person_id=?;""", person_id)
+    result = list(result)
+
+    if len(result) != 1:
+        raise Exception("Database selection returned invalid number of results")
+
+    result = result[0]
+
+    newP = Person(*result[1:10])
+    newP.setPlaceOfOrigin(*result[10:15])
+    newP.setCampLocation(*result[15:18])
+
+    return newP
+
+
+def execute_test_join(database):
+    """ test table creation by making join based queries
+    """
+
+    conn = create_connection(database)
+
+    if not conn:
+        sys.exit('Error, cannon create db connection')
+    cur = conn.cursor()
+
+    print(cur.execute("""SELECT * FROM Person p
                       INNER JOIN Person_Camp pc
                       ON p.person_id = pc.person_id
                       INNER JOIN Camp_Locations cl
