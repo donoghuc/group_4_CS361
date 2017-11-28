@@ -14,13 +14,10 @@
 <center>
 <br>
 
-<form action="{{ url_for('register') }}">
-    <input type="submit" value="Register New Individual" />
-</form>
-<br>
-<form action="{{ url_for('search') }}">
-    <input type="submit" value="Search For Refugee" />
-</form>
+<button style="height:30px;width:200px" onclick="{{ url_for('register') }}" type="button">
+     Register New Individual</button><br>
+<button style="height:30px;width:200px" onclick="{{ url_for('search') }}" type="button">
+     Search For Refugee</button>
 
  </center>
 </div>
