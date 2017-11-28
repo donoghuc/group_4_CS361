@@ -1,7 +1,9 @@
 import sqlite3
 import os
 import sys
-from refugee import Person
+import csv
+
+import refugee
 
 DATABASE_CON = os.path.join(os.getcwd(),"pythonsqlite.db")
 
@@ -183,7 +185,7 @@ def refugee_db_selection(person_id, database):
 
     result = result[0]
 
-    newP = Person(*result[1:10])
+    newP = refugee.Person(*result[1:10])
     newP.setPlaceOfOrigin(*result[10:15])
     newP.setCampLocation(*result[15:18])
 
@@ -210,9 +212,44 @@ def execute_test_join(database):
     print(cur.execute("""SELECT * FROM Person""").fetchall())
     conn.close()
 
+
+def fill_db_with_mock_data(file, database_con):
+    """ fill database with "mock" data
+    """
+
+    person_attributes = set(('name', 'date_of_birth', 'marital_status', 'citizenship',
+                             'education', 'occupation', 'religion', 'ethnic_origin', 'date_of_arrival'))
+    place_of_orig_attrs = set(('address1', 'city', 'region', 'postal_code', 'country'))
+    camp_loc_attrs = set(('shelter_number', 'block', 'section'))
+
+    # use context manager to open csv data
+    with open(file, newline='') as csvfile:
+        
+        fo = csv.reader(csvfile, delimiter=',')
+        column_names = next(fo)
+        for row in fo:
+            person_dict = dict()
+            place_orig_dict = dict()
+            camp_loc_dict = dict()
+            
+            for i in zip(column_names, row):
+                if i[0] in person_attributes:
+                    person_dict[i[0]] = i[1]
+                elif i[0] in place_of_orig_attrs:
+                    place_orig_dict[i[0]] = i[1]
+                elif i[0] in camp_loc_attrs:
+                    camp_loc_dict[i[0]] = i[1]
+                else:
+                    sys.exit('invalid value found in csv column header: {}'.format(i[0]))
+                    
+            person_dict['place_of_origin'] = refugee.Address(**place_orig_dict)
+            person_dict['camp_location'] = refugee.CampLocation(**camp_loc_dict)
+            person = refugee.Person(**person_dict)
+            refugee_db_insertion(person, database_con)
+
 if __name__ == '__main__':
 
-    person = Person('John M Doe', '2010-10-20', 'married', 'American',
+    person = refugee.Person('John M Doe', '2010-10-20', 'married', 'American',
                     'High School', 'Mason', 'Agnostic', 'White',
                     '2017-11-16')
     person.setPlaceOfOrigin('123 Pleasant St', '', 'Sharpsburg',
@@ -222,5 +259,5 @@ if __name__ == '__main__':
 
 
     create_tables(DATABASE_CON)
-    refugee_db_insertion(person, DATABASE_CON)
+    fill_db_with_mock_data('MOCK_DATA.csv', DATABASE_CON)
     execute_test_join(DATABASE_CON)
