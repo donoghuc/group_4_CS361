@@ -137,6 +137,9 @@ def reg2db():
     # Eventually maybe reroute to another page
     return json.jsonify(request.form)
 
+@app.route('/search')
+def search():
+    return render_template('forms/search.html')
 
 # Error handlers.
 

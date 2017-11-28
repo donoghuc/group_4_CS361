@@ -2,9 +2,28 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
+<!DOCTYPE html>
 <div class="page-header">
-  <h1>Sticky footer with fixed navbar</h1>
+  <h1>Welcome</h1>
+  <br><br /><center>
+<img src= "http://www.unhcr.org/assets/img/unhcr-logo.png">
+ 
 </div>
-<p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added within <code>#wrap</code> with <code>padding-top: 60px;</code> on the <code>.container</code>.</p>
+
+<div>
+<center>
+<br>
+
+<form action="{{ url_for('register') }}">
+    <input type="submit" value="Register New Individual" />
+</form>
+<br>
+<form action="{{ url_for('search') }}">
+    <input type="submit" value="Search For Refugee" />
+</form>
+
+ </center>
+</div>
+
 
 {% endblock %}
