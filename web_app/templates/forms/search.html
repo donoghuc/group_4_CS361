@@ -1,4 +1,13 @@
 {% extends 'layouts/form.html' %}
+
+{% macro create_form_line(form_item, value, required=true) -%}
+  <div class="input-group">
+    <span class="input-group-addon">{{ form_item.label.text}}:</span>
+    {{ form_item(class_ = 'form-control', placeholder = form_item.label.text,
+       required=required, value=value) }}
+  </div>
+{%- endmacro %}
+
 {% block title %}Search{% endblock %}
 {% block content %}
 
