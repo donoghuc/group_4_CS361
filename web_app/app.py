@@ -78,9 +78,9 @@ def register():
         person.build_person_from_form(form)
         # Insert person into database
         db.refugee_db_insertion(person, db.DATABASE_CON)
-        # redirect to home. 
+        # redirect to home.
         return redirect(url_for('home'))
-    # render form for collecting registration data. 
+    # render form for collecting registration data.
     return render_template('forms/register.html', person=person, form=form)
 
 
@@ -95,16 +95,10 @@ def reg2():
     # If get request has /reg2?file_number=<file_number>
     if 'file_number' in request.args:
         file_number = request.args['file_number']
+        person = db.refugee_db_selection(file_number, db.DATABASE_CON)
         new_entity = 0
-
-        # TODO get person from sql database
-        person = Person('John M Doe', '2010-10-20', 'married', 'American',
-                        'High School', 'Mason', 'Agnostic', 'White',
-                        '2017-11-16')
-        person.setPlaceOfOrigin('123 Pleasant St', '', 'Sharpsburg',
-                                'MD', '12345', 'US')
-        person.setCampLocation('23F', 'D', '4')
     else:
+        file_number = 0
         person = Person()
         new_entity = 1
 
@@ -112,15 +106,16 @@ def reg2():
     form.marital_status.default = person.marital_status.lower()
     form.process()
     return render_template('forms/registration2.html', person=person,
-                           form=form, new_entity=new_entity)
+                           form=form, new_entity=new_entity, file_number=file_number)
 
 
 @app.route('/reg2db', methods=['POST'])
 def reg2db():
+    form = Reg2Form(request.form)
+    form.validate_on_submit()
 
-    person = Person(**request.form)
-    person.setPlaceOfOrigin(**request.form)
-    person.setCampLocation(**request.form)
+    person = Person(file_number=request.form['file_number'])
+    person.build_person_from_form(form)
     new_entity = int(request.form['new_entity'])
 
     # Check person entity data in console
@@ -129,8 +124,10 @@ def reg2db():
     # app.logger.info(person.camp_location.__dict__)
     # app.logger.info('New Entity: ' + str(new_entity))
 
-    # TODO insert/update database with info
-    # insert if new_entity == 1, otherwise update
+    if new_entity == 1:
+        db.refugee_db_insertion(person, db.DATABASE_CON)
+    else:
+        db.refugee_db_update(person, db.DATABASE_CON)
 
     # Check post request data
     # This is temporary for checking data

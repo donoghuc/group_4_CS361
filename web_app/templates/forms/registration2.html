@@ -15,6 +15,7 @@
 
     <div style="padding-bottom:10px;">
       <input type="hidden" name="new_entity" value="{{ new_entity }}">
+      <input type="hidden" name="file_number" value="{{ file_number }}">
       {{ create_form_line(form.name, person.name) }}
       {{ create_form_line(form.date_of_birth, person.date_of_birth) }}
       {{ create_form_line(form.marital_status, person.marital_status) }}
