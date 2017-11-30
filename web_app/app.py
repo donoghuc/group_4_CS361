@@ -98,6 +98,7 @@ def reg2():
         person = db.refugee_db_selection(file_number, db.DATABASE_CON)
         new_entity = 0
     else:
+        file_number = 0
         person = Person()
         new_entity = 1
 
@@ -105,15 +106,16 @@ def reg2():
     form.marital_status.default = person.marital_status.lower()
     form.process()
     return render_template('forms/registration2.html', person=person,
-                           form=form, new_entity=new_entity)
+                           form=form, new_entity=new_entity, file_number=file_number)
 
 
 @app.route('/reg2db', methods=['POST'])
 def reg2db():
+    form = Reg2Form(request.form)
+    form.validate_on_submit()
 
-    person = Person(**request.form)
-    person.setPlaceOfOrigin(**request.form)
-    person.setCampLocation(**request.form)
+    person = Person(file_number=request.form['file_number'])
+    person.build_person_from_form(form)
     new_entity = int(request.form['new_entity'])
 
     # Check person entity data in console
@@ -122,8 +124,10 @@ def reg2db():
     # app.logger.info(person.camp_location.__dict__)
     # app.logger.info('New Entity: ' + str(new_entity))
 
-    # TODO insert/update database with info
-    # insert if new_entity == 1, otherwise update
+    if new_entity == 1:
+        db.refugee_db_insertion(person, db.DATABASE_CON)
+    else:
+        db.refugee_db_update(person, db.DATABASE_CON)
 
     # Check post request data
     # This is temporary for checking data

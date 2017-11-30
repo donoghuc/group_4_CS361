@@ -159,6 +159,75 @@ def refugee_db_insertion(prsn, database):
     conn.close()
 
 
+def refugee_db_update(prsn, database):
+
+    conn = create_connection(database)
+
+    if not conn:
+        sys.exit('Error, cannon create db connection')
+    cur = conn.cursor()
+
+    cur.execute("""UPDATE Person
+                SET name=?,
+                date_of_birth=?,
+                marital_status=?,
+                citizenship=?,
+                education=?,
+                occupation=?,
+                religion=?,
+                ethnic_origin=?,
+                date_of_arrival=?
+                WHERE person_id=?;""", (prsn.name,
+                                        prsn.date_of_birth,
+                                        prsn.marital_status,
+                                        prsn.citizenship,
+                                        prsn.education,
+                                        prsn.occupation,
+                                        prsn.religion,
+                                        prsn.ethnic_origin,
+                                        prsn.date_of_arrival,
+                                        prsn.file_number))
+
+    addr_id = cur.execute("""SELECT po.addr_id
+                          FROM Person p
+                          INNER JOIN Person_Origin po on po.person_id = p.person_id
+                          WHERE p.person_id=?;""", (prsn.file_number,))
+    addr_id = list(addr_id)
+    addr_id = addr_id[0][0]
+    print(type(addr_id), addr_id)
+
+    cur.execute("""UPDATE Origin_Address
+                SET address=?,
+                city=?,
+                region=?,
+                postal_code=?,
+                country=?
+                WHERE addr_id=?;""", (prsn.place_of_origin.address1,
+                                      prsn.place_of_origin.city,
+                                      prsn.place_of_origin.region,
+                                      prsn.place_of_origin.postal_code,
+                                      prsn.place_of_origin.country,
+                                      addr_id))
+
+    camp_id = cur.execute("""SELECT pc.camp_id
+                          FROM Person p
+                          INNER JOIN Person_Camp pc on pc.person_id = p.person_id
+                          WHERE p.person_id=?;""", (prsn.file_number,))
+    camp_id = list(camp_id)[0][0]
+
+    cur.execute("""UPDATE Camp_Locations
+                SET shelter_number=?,
+                block=?,
+                section=?
+                WHERE camp_id=?;""", (prsn.camp_location.shelter_number,
+                                      prsn.camp_location.block,
+                                      prsn.camp_location.section,
+                                      camp_id))
+
+    conn.commit()
+    conn.close()
+
+
 def refugee_db_selection(person_id, database):
 
     conn = create_connection(database)
@@ -177,7 +246,7 @@ def refugee_db_selection(person_id, database):
                        INNER JOIN Origin_Address oa ON oa.addr_id = po.addr_id
                        INNER JOIN Person_Camp pc ON pc.person_id = p.person_id
                        INNER JOIN Camp_Locations cl ON cl.camp_id = pc.camp_id
-                       WHERE p.person_id=?;""", person_id)
+                       WHERE p.person_id=?;""", (person_id,))
     result = list(result)
 
     if len(result) != 1:
@@ -185,9 +254,11 @@ def refugee_db_selection(person_id, database):
 
     result = result[0]
 
-    newP = refugee.Person(*result[1:10])
+    newP = refugee.Person(*result[:10])
     newP.setPlaceOfOrigin(result[10], '', *result[11:15])
     newP.setCampLocation(*result[15:])
+
+    conn.close()
 
     return newP
 
