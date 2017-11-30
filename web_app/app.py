@@ -137,9 +137,15 @@ def reg2db():
     # Eventually maybe reroute to another page
     return json.jsonify(request.form)
 
-@app.route('/search')
+@app.route('/search', methods= ['GET', 'POST'])
 def search():
+    if request.method == "POST":
+        conn = sqlite3.connect(db_file)
+        c=conn.cursor()
+        c.execute('''SELECT * FROM Person WHERE name = %s''', request.form['search'])
+        return render_template("results.html", records=c.fetchall())
     return render_template('forms/search.html')
+
 
 # Error handlers.
 

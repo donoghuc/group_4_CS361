@@ -9,3 +9,6 @@ DEBUG = True
 SECRET_KEY = 'not so secret'
 
 
+MAX_SEARCH_RESULTS = 10 
+
+

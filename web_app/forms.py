@@ -64,4 +64,4 @@ class Reg2Form(Form):
     date_of_arrival = DateField('Date of Arrival', validators=[DataRequired()], format='%Y-%m-%d')
     
 class SearchForm(Form):
-    name = TextField('Name', validators=[DataRequired()])
+    search = TextField('search', validators =[DataRequired()])

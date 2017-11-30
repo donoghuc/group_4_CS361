@@ -4,8 +4,7 @@
 
 <!DOCTYPE html>
 <div class="page-header">
-  <h1>Welcome</h1>
-  <br><br /><center>
+  <br><center>
 <img src= "http://www.unhcr.org/assets/img/unhcr-logo.png">
  
 </div>
@@ -13,11 +12,13 @@
 <div>
 <center>
 <br>
-
+<button style="height:30px;width:200px" onclick="location.href='{{ url_for('login') }}'" type="button">
+     Login</button><br>
 <button style="height:30px;width:200px" onclick="location.href='{{ url_for('register') }}'" type="button">
      Register New Individual</button><br>
 <button style="height:30px;width:200px" onclick="location.href='{{ url_for('search') }}'" type="button">
      Search For Refugee</button>
+
 
  </center>
 </div>

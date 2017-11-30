@@ -10,9 +10,26 @@
 
 {% block title %}Search{% endblock %}
 {% block content %}
+ <form method="post" class="form form-reset">
+    <h1 class="form-heading"><a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h1>
+</form>
 
-
-<h3 class="form-heading">Search For Refugee Account<a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h3>
-
-  
+<div class="page-header">
+ <h2>Search For Refugee Account</h2>
+  <center>
+<img src= "http://www.unhcr.org/assets/img/unhcr-logo.png">
+</div>
+<center>
+<div class="search">
+<form action="/search" method=post>
+    <input type=text style="width:400px" name=search placeholder= "Enter Refugee Name" value="{{ request.form.search}}"></br>
+    <div class="actions"><input type=submit style="width:400px" value="SEARCH"></div>
+</form>
+</div>
+{% for message in get_flashed_messages() %}
+<div class=flash>
+    {{ message }}
+</div>
+{% endfor %}
 {% endblock %}
+
