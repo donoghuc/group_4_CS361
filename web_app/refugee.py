@@ -2,7 +2,7 @@
 
 class Address:
     def __init__(self, address1='', address2='', city='', region='',
-                 postal_code='', country='', **_):
+                 postal_code='', country=''):
         self.address1 = address1
         self.address2 = address2
         self.city = city
@@ -12,7 +12,7 @@ class Address:
 
 
 class CampLocation:
-    def __init__(self, shelter_number='', block='', section='', **_):
+    def __init__(self, shelter_number='', block='', section=''):
         self.shelter_number = shelter_number
         self.block = block
         self.section = section
@@ -22,7 +22,7 @@ class Person:
     def __init__(self, file_number='', name='', date_of_birth='', marital_status='',
                  citizenship='', education='', occupation='', religion='',
                  ethnic_origin='', date_of_arrival='', place_of_origin=None,
-                 camp_location=None, **_):
+                 camp_location=None):
         self.file_number = file_number
         self.name = name
         self.date_of_birth = date_of_birth
