@@ -78,9 +78,9 @@ def register():
         person.build_person_from_form(form)
         # Insert person into database
         db.refugee_db_insertion(person, db.DATABASE_CON)
-        # redirect to home. 
+        # redirect to home.
         return redirect(url_for('home'))
-    # render form for collecting registration data. 
+    # render form for collecting registration data.
     return render_template('forms/register.html', person=person, form=form)
 
 
@@ -95,15 +95,8 @@ def reg2():
     # If get request has /reg2?file_number=<file_number>
     if 'file_number' in request.args:
         file_number = request.args['file_number']
+        person = db.refugee_db_selection(file_number, db.DATABASE_CON)
         new_entity = 0
-
-        # TODO get person from sql database
-        person = Person('John M Doe', '2010-10-20', 'married', 'American',
-                        'High School', 'Mason', 'Agnostic', 'White',
-                        '2017-11-16')
-        person.setPlaceOfOrigin('123 Pleasant St', '', 'Sharpsburg',
-                                'MD', '12345', 'US')
-        person.setCampLocation('23F', 'D', '4')
     else:
         person = Person()
         new_entity = 1
