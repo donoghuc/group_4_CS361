@@ -186,8 +186,8 @@ def refugee_db_selection(person_id, database):
     result = result[0]
 
     newP = refugee.Person(*result[1:10])
-    newP.setPlaceOfOrigin(*result[10:15])
-    newP.setCampLocation(*result[15:18])
+    newP.setPlaceOfOrigin(result[10], '', *result[11:15])
+    newP.setCampLocation(*result[15:])
 
     return newP
 
@@ -224,14 +224,14 @@ def fill_db_with_mock_data(file, database_con):
 
     # use context manager to open csv data
     with open(file, newline='') as csvfile:
-        
+
         fo = csv.reader(csvfile, delimiter=',')
         column_names = next(fo)
         for row in fo:
             person_dict = dict()
             place_orig_dict = dict()
             camp_loc_dict = dict()
-            
+
             for i in zip(column_names, row):
                 if i[0] in person_attributes:
                     person_dict[i[0]] = i[1]
@@ -241,7 +241,7 @@ def fill_db_with_mock_data(file, database_con):
                     camp_loc_dict[i[0]] = i[1]
                 else:
                     sys.exit('invalid value found in csv column header: {}'.format(i[0]))
-                    
+
             person_dict['place_of_origin'] = refugee.Address(**place_orig_dict)
             person_dict['camp_location'] = refugee.CampLocation(**camp_loc_dict)
             person = refugee.Person(**person_dict)
