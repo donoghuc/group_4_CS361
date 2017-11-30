@@ -137,12 +137,10 @@ def reg2db():
 @app.route('/search', methods= ['GET', 'POST'])
 def search():
     if request.method == "POST":
-        conn = sqlite3.connect(db_file)
-        c=conn.cursor()
-        c.execute('''SELECT * FROM Person WHERE name = %s''', request.form['search'])
-        return render_template("results.html", records=c.fetchall())
+        db.refugee_db_search_by_name(name, db.DATABASE_CON)
+        # redirect to results page
+        return redirect("results.html", records=c.fetchall())
     return render_template('forms/search.html')
-
 
 # Error handlers.
 

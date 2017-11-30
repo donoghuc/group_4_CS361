@@ -262,6 +262,25 @@ def refugee_db_selection(person_id, database):
 
     return newP
 
+def refugee_db_search_by_name(name, database)
+    conn = create_connection(database)
+    if not conn:
+        sys.exit('Error, cannon create db connection')
+    cur = conn.cursor()
+    result = cur.execute("""SELECT p.person_id, p.name, p.date_of_birth, p.marital_status,
+                       p.citizenship, p.education, p.occupation, p.religion, p.ethnic_origin,
+                       p.date_of_arrival,
+                       oa.address, oa.city, oa.region, oa.postal_code, oa.country,
+                       cl.shelter_number, cl.block, cl.section
+                       FROM Person p
+                       INNER JOIN Person_Origin po ON po.person_id = p.person_id
+                       INNER JOIN Origin_Address oa ON oa.addr_id = po.addr_id
+                       INNER JOIN Person_Camp pc ON pc.person_id = p.person_id
+                       INNER JOIN Camp_Locations cl ON cl.camp_id = pc.camp_id
+                       WHERE p.name=?;""", (name,))
+    result = list(result)
+    conn.close()
+
 
 def execute_test_join(database):
     """ test table creation by making join based queries
