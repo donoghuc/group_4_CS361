@@ -313,7 +313,7 @@ def fill_db_with_mock_data(file, database_con):
     camp_loc_attrs = set(('shelter_number', 'block', 'section'))
 
     # use context manager to open csv data
-    with open(file, newline='') as csvfile:
+    with open(file) as csvfile:
 
         fo = csv.reader(csvfile, delimiter=',')
         column_names = next(fo)

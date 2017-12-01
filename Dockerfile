@@ -1,4 +1,5 @@
 FROM ubuntu:latest
+# communicate through oracle proxy 
 
 # use aptitute to get packages for pulling and installing conda and vim for editing 
 RUN apt-get update && apt-get install -y curl && apt-get install -y bzip2 && apt-get install -y vim
@@ -13,11 +14,5 @@ ENV PATH=/anaconda/bin:$PATH
 RUN pip install flask_wtf 
 
 # copy over source code
-RUN mkdir /web_app && mkdir /web_app/static && mkdir /web_app/templates
-COPY web_app/app.py /web_app
-COPY web_app/forms.py /web_app
-COPY web_app/make_database.py /web_app
-COPY web_app/refugee.py /web_app
-COPY web_app/config.py /web_app
-COPY web_app/static /web_app/static/
-COPY web_app/templates /web_app/templates/
+RUN mkdir /web_app 
+COPY web_app /web_app
