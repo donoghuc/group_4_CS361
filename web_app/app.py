@@ -52,7 +52,10 @@ def home():
 
 @app.route('/about')
 def about():
-    return render_template('pages/placeholder.about.html')
+    if not session.get('logged_in'):
+        return render_template('forms/login.html')
+    else:
+        return render_template('pages/placeholder.about.html')
 
 
 @app.route('/login', methods =['GET', 'POST'])
@@ -73,27 +76,30 @@ def logout():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    """ This view will handle the refugee registration form
-        Get and validate data and push to database
-    """
+    if not session.get('logged_in'):
+        return render_template('forms/login.html')
+    else:
+        """ This view will handle the refugee registration form
+            Get and validate data and push to database
+        """
 
-    # Intialize empty person object
-    person = Person()
-    person.setPlaceOfOrigin()
-    person.setCampLocation()
-    # get form data
-    form = Reg2Form(request.form)
-    if request.method == 'POST':
-        # validate form data
-        form.validate_on_submit()
-        # set state of person based on validated form data
-        person.build_person_from_form(form)
-        # Insert person into database
-        db.refugee_db_insertion(person, db.DATABASE_CON)
-        # redirect to home.
-        return redirect(url_for('home'))
-    # render form for collecting registration data.
-    return render_template('forms/register.html', person=person, form=form)
+        # Intialize empty person object
+        person = Person()
+        person.setPlaceOfOrigin()
+        person.setCampLocation()
+        # get form data
+        form = Reg2Form(request.form)
+        if request.method == 'POST':
+            # validate form data
+            form.validate_on_submit()
+            # set state of person based on validated form data
+            person.build_person_from_form(form)
+            # Insert person into database
+            db.refugee_db_insertion(person, db.DATABASE_CON)
+            # redirect to home.
+            return redirect(url_for('home'))
+        # render form for collecting registration data.
+        return render_template('forms/register.html', person=person, form=form)
 
 
 @app.route('/forgot')
@@ -104,31 +110,37 @@ def forgot():
 
 @app.route('/reg2', methods=['GET'])
 def reg2():
-    # If get request has /reg2?file_number=<file_number>
-    if 'file_number' in request.args:
-        file_number = request.args['file_number']
-        person = db.refugee_db_selection(file_number, db.DATABASE_CON)
-        new_entity = 0
+    if not session.get('logged_in'):
+        return render_template('forms/login.html')
     else:
-        file_number = 0
-        person = Person()
-        new_entity = 1
+        # If get request has /reg2?file_number=<file_number>
+        if 'file_number' in request.args:
+            file_number = request.args['file_number']
+            person = db.refugee_db_selection(file_number, db.DATABASE_CON)
+            new_entity = 0
+        else:
+            file_number = 0
+            person = Person()
+            new_entity = 1
 
-    form = Reg2Form(request.form)
-    form.marital_status.default = person.marital_status.lower()
-    form.process()
-    return render_template('forms/registration2.html', person=person,
+        form = Reg2Form(request.form)
+        form.marital_status.default = person.marital_status.lower()
+        form.process()
+        return render_template('forms/registration2.html', person=person,
                            form=form, new_entity=new_entity, file_number=file_number)
 
 
 @app.route('/reg2db', methods=['POST'])
 def reg2db():
-    form = Reg2Form(request.form)
-    form.validate_on_submit()
+    if not session.get('logged_in'):
+        return render_template('forms/login.html')
+    else:
+        form = Reg2Form(request.form)
+        form.validate_on_submit()
 
-    person = Person(file_number=request.form['file_number'])
-    person.build_person_from_form(form)
-    new_entity = int(request.form['new_entity'])
+        person = Person(file_number=request.form['file_number'])
+        person.build_person_from_form(form)
+        new_entity = int(request.form['new_entity'])
 
     # Check person entity data in console
     # app.logger.info(person.__dict__)
@@ -136,26 +148,29 @@ def reg2db():
     # app.logger.info(person.camp_location.__dict__)
     # app.logger.info('New Entity: ' + str(new_entity))
 
-    if new_entity == 1:
-        db.refugee_db_insertion(person, db.DATABASE_CON)
-    else:
-        db.refugee_db_update(person, db.DATABASE_CON)
+        if new_entity == 1:
+            db.refugee_db_insertion(person, db.DATABASE_CON)
+        else:
+            db.refugee_db_update(person, db.DATABASE_CON)
 
     # Check post request data
     # This is temporary for checking data
     # Eventually maybe reroute to another page
-    return json.jsonify(request.form)
+        return json.jsonify(request.form)
 
 @app.route('/search', methods= ['GET', 'POST'])
 def search():
-    if request.method == "POST":
-        form = Reg2Form(request.form)
-        form.validate_on_submit()
-        name = request.args['search']
-        person = db.refugee_db_search_by_name(name, db.DATABASE_CON)
-        # redirect to results page
-        return redirect("reg2.html", records=c.fetchall())
-    return render_template('forms/search.html')
+    if not session.get('logged_in'):
+        return render_template('forms/login.html')
+    else:
+        if request.method == "POST":
+            form = Reg2Form(request.form)
+            form.validate_on_submit()
+            name = request.args['search']
+            person = db.refugee_db_search_by_name(name, db.DATABASE_CON)
+            # redirect to results page
+            return redirect("reg2.html", records=c.fetchall())
+        return render_template('forms/search.html')
 
 # Error handlers.
 
