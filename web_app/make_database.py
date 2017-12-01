@@ -109,7 +109,7 @@ def refugee_db_insertion(prsn, database):
     print(repr(prsn))
 
     if not conn:
-        sys.exit('Error, cannon create db connection')
+        sys.exit('Error, cannot create db connection')
     cur = conn.cursor()
 
     cur.execute("""INSERT INTO Person (name,
@@ -164,7 +164,7 @@ def refugee_db_update(prsn, database):
     conn = create_connection(database)
 
     if not conn:
-        sys.exit('Error, cannon create db connection')
+        sys.exit('Error, cannot create db connection')
     cur = conn.cursor()
 
     cur.execute("""UPDATE Person
@@ -233,7 +233,7 @@ def refugee_db_selection(person_id, database):
     conn = create_connection(database)
 
     if not conn:
-        sys.exit('Error, cannon create db connection')
+        sys.exit('Error, cannot create db connection')
     cur = conn.cursor()
 
     result = cur.execute("""SELECT p.person_id, p.name, p.date_of_birth, p.marital_status,
@@ -265,7 +265,7 @@ def refugee_db_selection(person_id, database):
 def refugee_db_search_by_name(name, database):
     conn = create_connection(database)
     if not conn:
-        sys.exit('Error, cannon create db connection')
+        sys.exit('Error, cannot create db connection')
     cur = conn.cursor()
     result = cur.execute("""SELECT p.person_id, p.name, p.date_of_birth, p.marital_status,
                        p.citizenship, p.education, p.occupation, p.religion, p.ethnic_origin,
@@ -289,7 +289,7 @@ def execute_test_join(database):
     conn = create_connection(database)
 
     if not conn:
-        sys.exit('Error, cannon create db connection')
+        sys.exit('Error, cannot create db connection')
     cur = conn.cursor()
 
     print(cur.execute("""SELECT * FROM Person p

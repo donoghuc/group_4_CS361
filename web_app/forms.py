@@ -4,6 +4,7 @@ from wtforms.fields.html5 import DateField, IntegerField
 from wtforms.fields import SelectField
 from wtforms.validators import DataRequired, EqualTo, Length
 
+
 # Set your classes here.
 
 
@@ -24,9 +25,9 @@ class RegisterForm(Form):
     )
 
 
-class LoginForm(Form):
-    name = TextField('Username', [DataRequired()])
-    password = PasswordField('Password', [DataRequired()])
+#class LoginForm(Form):
+  #  name = TextField('Username', [DataRequired()])
+    #password = PasswordField('Password', [DataRequired()])
 
 
 class ForgotForm(Form):
@@ -65,3 +66,4 @@ class Reg2Form(Form):
     
 class SearchForm(Form):
     search = TextField('search', validators =[DataRequired()])
+    

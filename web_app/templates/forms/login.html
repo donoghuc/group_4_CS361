@@ -1,14 +1,34 @@
-{% extends 'layouts/form.html' %}
-{% block title %}Login{% endblock %}
+<link rel="stylesheet" href="/static/css/style.css" type="text/css">
 {% block content %}
-  <form method="post" class="form">
-    <h3 class="form-heading">Login <a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h3>
-    {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
-    {{ form.password(class_ = 'form-control last-input', placeholder = form.password.label.text, required = true) }}
-    <p class="pull-left"><a href="{{ url_for('forgot') }}">Forgot Password?</a></p>
-    <p class="pull-right"><a href="{{ url_for('register') }}">Register</a></p>
-    <input type="submit" value="Submit" class="btn btn-primary btn-lg btn-block" disabled>
-    <p>You must add database as well as Flask-Login to enable user management. See the <a href="http://www.realpython.com">Real Python</a> course for more info!</p>
-  </form>
-{% endblock %}
+{% if session['logged_in'] %}
+<p>You're logged in already!</p>
+{% else %}
 
+<form action="/login" method="POST" class ="form">
+	<div class="login">
+		<div class="login-screen">
+			<div class="app-title">
+			</div>
+     <h1>U. N. H. C. R.</h1>
+	  <img src="/static/img/Earth.jpg" alt="Earth" style="width:250px;height:250px;">
+
+			<div class="login-form">
+				<div class="control-group">
+				<input type="text" class="login-field" value="" placeholder="username" name="username">
+				<label class="login-field-icon fui-user" for="login-name"></label>
+				</div>
+ 
+				<div class="control-group">
+				<input type="password" class="login-field" value="" placeholder="password" name="password">
+				<label class="login-field-icon fui-lock" for="login-pass"></label>
+				</div>
+ 
+                <input type="submit" value="Log in" class="btn btn-primary btn-large btn-block" >
+			    <br>
+			</div>
+		</div>
+	</div>
+</form>
+ 
+{% endif %}
+{% endblock %}

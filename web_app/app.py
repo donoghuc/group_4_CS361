@@ -2,13 +2,12 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request, render_template_string, json, redirect, url_for
+from flask import Flask, render_template, request, render_template_string, json, redirect, url_for, flash, session
 import logging
 from logging import Formatter, FileHandler
 from forms import *
 import os
 from refugee import Person
-import make_database as db
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -45,7 +44,10 @@ app.config.from_object('config')
 
 @app.route('/')
 def home():
-    return render_template('pages/placeholder.home.html')
+    if not session.get('logged_in'):
+        return render_template('forms/login.html')
+    else:
+        return render_template('pages/placeholder.home.html')
 
 
 @app.route('/about')
@@ -53,10 +55,20 @@ def about():
     return render_template('pages/placeholder.about.html')
 
 
-@app.route('/login')
+@app.route('/login', methods =['GET', 'POST'])
 def login():
-    form = LoginForm(request.form)
-    return render_template('forms/login.html', form=form)
+    if request.method == 'POST':
+        if request.form['password'] == 'password' and request.form['username'] == 'admin':
+          session['logged_in'] = True;
+        flash('Welcome!')
+    return home()
+       # form = LoginForm(request.form)
+   # return render_template('forms/login.html', form=form)
+   
+@app.route("/logout")
+def logout():
+    session['logged_in'] = False
+    return home()
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -137,9 +149,12 @@ def reg2db():
 @app.route('/search', methods= ['GET', 'POST'])
 def search():
     if request.method == "POST":
-        db.refugee_db_search_by_name(name, db.DATABASE_CON)
+        form = Reg2Form(request.form)
+        form.validate_on_submit()
+        name = request.args['search']
+        person = db.refugee_db_search_by_name(name, db.DATABASE_CON)
         # redirect to results page
-        return redirect("results.html", records=c.fetchall())
+        return redirect("reg2.html", records=c.fetchall())
     return render_template('forms/search.html')
 
 # Error handlers.
@@ -164,6 +179,8 @@ if not app.debug:
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
     app.logger.info('errors')
+
+
 
 #----------------------------------------------------------------------------#
 # Launch.
