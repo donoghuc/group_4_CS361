@@ -26,10 +26,4 @@
     <div class="actions"><input type=submit style="width:400px" value="SEARCH"></div>
 </form>
 </div>
-{% for message in get_flashed_messages() %}
-<div class=flash>
-    {{ message }}
-</div>
-{% endfor %}
 {% endblock %}
-

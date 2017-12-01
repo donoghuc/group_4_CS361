@@ -262,6 +262,28 @@ def refugee_db_selection(person_id, database):
 
     return newP
 
+
+def refugee_db_get_id_from_name(name, database):
+
+    conn = create_connection(database)
+
+    if not conn:
+        sys.exit('Error, cannot create db connection')
+    cur = conn.cursor()
+
+    result = cur.execute("""SELECT person_id
+                       FROM Person
+                       WHERE name=?;""", (name,))
+    result = list(result)
+
+    if len(result) < 1:
+        raise Exception("Database selection returned invalid number of results")
+
+    conn.close()
+
+    return result[0][0]
+
+
 def refugee_db_search_by_name(name, database):
     conn = create_connection(database)
     if not conn:

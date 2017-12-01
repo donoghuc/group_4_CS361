@@ -153,10 +153,15 @@ def search():
         if request.method == "POST":
             form = Reg2Form(request.form)
             form.validate_on_submit()
-            name = request.args['search']
-            person = db.refugee_db_search_by_name(name, db.DATABASE_CON)
-            # redirect to results page
-            return redirect("reg2.html", records=c.fetchall())
+            name = request.form['search']
+
+            try:
+                file_number = db.refugee_db_get_id_from_name(name, db.DATABASE_CON)
+            except:
+                flash("Name \"{}\" does not exist".format(name))
+                return render_template('forms/search.html')
+
+            return redirect('update?file_number=' + str(file_number))
         return render_template('forms/search.html')
 
 # Error handlers.
