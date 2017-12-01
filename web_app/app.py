@@ -68,7 +68,7 @@ def login():
     return home()
        # form = LoginForm(request.form)
    # return render_template('forms/login.html', form=form)
-   
+
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
@@ -109,11 +109,12 @@ def forgot():
     return render_template('forms/forgot.html', form=form)
 
 
-@app.route('/reg2', methods=['GET'])
+@app.route('/update', methods=['GET', 'POST'])
 def reg2():
     if not session.get('logged_in'):
         return render_template('forms/login.html')
-    else:
+
+    if request.method == 'GET':
         # If get request has /reg2?file_number=<file_number>
         if 'file_number' in request.args:
             file_number = request.args['file_number']
@@ -127,15 +128,9 @@ def reg2():
         form = Reg2Form(request.form)
         form.marital_status.default = person.marital_status.lower()
         form.process()
-        return render_template('forms/registration2.html', person=person,
+        return render_template('forms/update.html', person=person,
                            form=form, new_entity=new_entity, file_number=file_number)
-
-
-@app.route('/reg2db', methods=['POST'])
-def reg2db():
-    if not session.get('logged_in'):
-        return render_template('forms/login.html')
-    else:
+    elif request.method == 'POST':
         form = Reg2Form(request.form)
         form.validate_on_submit()
 
@@ -143,21 +138,12 @@ def reg2db():
         person.build_person_from_form(form)
         new_entity = int(request.form['new_entity'])
 
-    # Check person entity data in console
-    # app.logger.info(person.__dict__)
-    # app.logger.info(person.place_of_origin.__dict__)
-    # app.logger.info(person.camp_location.__dict__)
-    # app.logger.info('New Entity: ' + str(new_entity))
-
         if new_entity == 1:
             db.refugee_db_insertion(person, db.DATABASE_CON)
         else:
             db.refugee_db_update(person, db.DATABASE_CON)
 
-    # Check post request data
-    # This is temporary for checking data
-    # Eventually maybe reroute to another page
-        return json.jsonify(request.form)
+        return redirect(url_for('home'))
 
 @app.route('/search', methods= ['GET', 'POST'])
 def search():

@@ -8,10 +8,10 @@
   </div>
 {%- endmacro %}
 
-{% block title %}UNHCR Level 2 Registration{% endblock %}
+{% block title %}UNHCR Registration{% endblock %}
 {% block content %}
-  <form method="post" class="form form-reset" action="/reg2db">
-    <h1 class="form-heading">UNHCR Level 2 Registration<a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h1>
+  <form method="post" class="form form-reset" action="/update">
+    <h1 class="form-heading">UNHCR Registration<a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h1>
 
     <div style="padding-bottom:10px;">
       <input type="hidden" name="new_entity" value="{{ new_entity }}">
