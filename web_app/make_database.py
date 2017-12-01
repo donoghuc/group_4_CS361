@@ -262,7 +262,7 @@ def refugee_db_selection(person_id, database):
 
     return newP
 
-def refugee_db_search_by_name(name, database)
+def refugee_db_search_by_name(name, database):
     conn = create_connection(database)
     if not conn:
         sys.exit('Error, cannon create db connection')
