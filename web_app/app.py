@@ -8,6 +8,7 @@ from logging import Formatter, FileHandler
 from forms import *
 import os
 from refugee import Person
+import make_database as db
 
 #----------------------------------------------------------------------------#
 # App Config.
